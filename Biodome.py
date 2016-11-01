@@ -74,7 +74,7 @@ while MainLoop is True:
                     elif alpha == alpha5:
                         alpha = random.choice([alpha0, alpha3, alpha2, alpha1, alpha4])
                     drawBiodome()
-
+        #Selects a random alpha variable and draws biodome with new alpha value (constantly while key is held)
         key = pygame.key.get_pressed()
         if key[pygame.K_s]:
             if alpha == alpha0:
