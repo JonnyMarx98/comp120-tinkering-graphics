@@ -16,7 +16,7 @@ pygame.display.update()
 
 
 #Loads image
-Biodome = pygame.image.load('Biodome.jpg')
+Biodome = pygame.image.load('Biodome.jpg') #Image must be saved in same place as program
 imageRect = Biodome.get_rect()
 
 
