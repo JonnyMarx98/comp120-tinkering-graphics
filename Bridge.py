@@ -1,36 +1,62 @@
-import pygame, sys, random, time, math, timeit
+import pygame, sys
 from pygame.locals import *
 
 pygame.init()
-clock = pygame.time.Clock()
 
-WIDTH = 720
-HEIGHT = 540
+#Create window
+WIDTH = 1000
+HEIGHT = 720
+screen = pygame.display.set_mode([WIDTH, HEIGHT])
 
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Sci-Fi Mood Board')
-screen.fill((255, 255, 255))
-pygame.display.update()
-
+#Background
 Bridge = pygame.image.load('Bridge.jpg')
-imageRect = Bridge.get_rect()
 Bridge = pygame.transform.scale(Bridge, (WIDTH, HEIGHT))
 
-def drawBridge():
-    screen.blit(Bridge, imageRect)
-    pygame.display.flip()
 
-MainLoop = True
 
-while MainLoop is True:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            #esc key exits
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
-                    exit()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_1:
-                    drawBridge()
+def LightsOff(Bridge):
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            Red = screen.get_at((X, Y)).r
+            Green = screen.get_at((X, Y)).g
+            Blue = screen.get_at((X, Y)).b
+            pxarray[X, Y] = (Red/3, Green/3, Blue/3)
+
+def LightsOn(Bridge):
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            Red = screen.get_at((X, Y)).r
+            Green = screen.get_at((X, Y)).g
+            Blue = screen.get_at((X, Y)).b
+            if Red < 86 and Green < 86 and Blue < 86:
+                pxarray[X, Y] = (Red*3, Green*3, Blue*3)
+
+screen.blit(Bridge, [0, 0])
+for Y in xrange(HEIGHT):
+    for X in xrange(WIDTH):
+        Red1 = screen.get_at((X, Y)).r
+        Green1 = screen.get_at((X, Y)).g
+        Blue1 = screen.get_at((X, Y)).b
+
+def resetBridge():
+    screen.blit(Bridge, [0, 0])
+
+
+while True:
+    keys_pressed = pygame.key.get_pressed()
+    pxarray = pygame.PixelArray(screen)
+
+    if keys_pressed[K_SPACE]:
+        del pxarray
+        resetBridge()
+        pxarray = pygame.PixelArray(screen)
+    if keys_pressed[K_DOWN]:
+        LightsOff(Bridge)
+    if keys_pressed[K_UP]:
+        LightsOn(Bridge)
+
+    del pxarray
+    pygame.display.update()
+    for event in pygame.event.get():
+        if event.type ==pygame.QUIT :
+            sys.exit()
