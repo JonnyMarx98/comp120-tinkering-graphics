@@ -3,17 +3,17 @@ from pygame.locals import *
 
 pygame.init()
 
-#Create window
+# Creates the screen
 WIDTH = 1000
 HEIGHT = 720
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 
-#Background
+# Loads the image
 Bridge = pygame.image.load('Bridge.jpg')
 Bridge = pygame.transform.scale(Bridge, (WIDTH, HEIGHT))
 
 
-
+# Makes the image darker by dividing the pixels by 3
 def LightsOff(Bridge):
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
@@ -22,6 +22,7 @@ def LightsOff(Bridge):
             Blue = screen.get_at((X, Y)).b
             pxarray[X, Y] = (Red/3, Green/3, Blue/3)
 
+# # Makes the image lighter by multiplying the pixels by 3
 def LightsOn(Bridge):
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
@@ -31,13 +32,10 @@ def LightsOn(Bridge):
             if Red < 86 and Green < 86 and Blue < 86:
                 pxarray[X, Y] = (Red*3, Green*3, Blue*3)
 
+# blits the image to the screen
 screen.blit(Bridge, [0, 0])
-for Y in xrange(HEIGHT):
-    for X in xrange(WIDTH):
-        Red1 = screen.get_at((X, Y)).r
-        Green1 = screen.get_at((X, Y)).g
-        Blue1 = screen.get_at((X, Y)).b
 
+# Resets the image
 def resetBridge():
     screen.blit(Bridge, [0, 0])
 
@@ -47,6 +45,7 @@ while True:
     pxarray = pygame.PixelArray(screen)
 
     if keys_pressed[K_SPACE]:
+        # deletes pxarray to unlock the surface
         del pxarray
         resetBridge()
         pxarray = pygame.PixelArray(screen)
