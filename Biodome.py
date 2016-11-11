@@ -16,7 +16,7 @@ pygame.display.update()
 
 
 #Loads image
-Biodome = pygame.image.load('Biodome.jpg') #Image must be saved in same place as program
+Biodome = pygame.image.load('Biodome.jpg')  #Image must be saved in same place as program
 imageRect = Biodome.get_rect()
 
 
@@ -26,14 +26,16 @@ def drawBiodome():
     pygame.display.flip()
     Biodome.set_alpha(alpha)
 
-alpha = 250
-alpha0 = 250
-alpha1 = 175
-alpha2 = 125
-alpha3 = 75
-alpha4 = 50
-alpha5 = 20
+# Setting different transparency values
+alpha = 255
+alpha0 = 255
+alpha1 = 210
+alpha2 = 170
+alpha3 = 130
+alpha4 = 90
+alpha5 = 50
 
+# Setting different background colours
 BackColour = (255, 255, 255)
 WHITE = (255, 255, 255)
 RED = (255, 0, 0)
@@ -45,38 +47,26 @@ colour3 = (247, 27, 247)
 
 
 MainLoop = True
-
 while MainLoop is True:
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
-            #esc key exits
+            # esc key exits
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     exit()
-            #draws biodome
+            # Draws biodome
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
+                    # Resets alpha to 255 (no transparency)
+                    alpha = 255
                     drawBiodome()
-            #Selects a random alpha variable and draws biodome with new alpha value
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_a:
-                    if alpha == alpha0:
-                        alpha = random.choice([alpha4, alpha3, alpha2, alpha1, alpha5])
-                    elif alpha == alpha1:
-                        alpha = random.choice([alpha4, alpha3, alpha2, alpha0, alpha5])
-                    elif alpha == alpha2:
-                        alpha = random.choice([alpha4, alpha3, alpha0, alpha1, alpha5])
-                    elif alpha == alpha3:
-                        alpha = random.choice([alpha4, alpha0, alpha2, alpha1, alpha5])
-                    elif alpha == alpha4:
-                        alpha = random.choice([alpha0, alpha3, alpha2, alpha1, alpha5])
-                    elif alpha == alpha5:
-                        alpha = random.choice([alpha0, alpha3, alpha2, alpha1, alpha4])
-                    drawBiodome()
-        #Selects a random alpha variable and draws biodome with new alpha value (constantly while key is held)
+
+
         key = pygame.key.get_pressed()
-        if key[pygame.K_s]:
+        if key[pygame.K_2]:
+            # Selects a random alpha variable and draws biodome with new alpha value
             if alpha == alpha0:
                 alpha = random.choice([alpha4, alpha3, alpha2, alpha1, alpha5])
             elif alpha == alpha1:
@@ -91,6 +81,7 @@ while MainLoop is True:
                  alpha = random.choice([alpha0, alpha3, alpha2, alpha1, alpha4])
             drawBiodome()
 
+            # Selects a random background colour and fills the screen with it.
             if BackColour == WHITE:
                 BackColour = random.choice([RED, BLACK, BLUE, colour1, colour2, colour3])
             elif BackColour == RED:
@@ -106,7 +97,8 @@ while MainLoop is True:
             elif BackColour == colour3:
                 BackColour = random.choice([WHITE, WHITE, BLUE, colour1, colour2, BLACK])
             screen.fill((BackColour))
+            # changes how frequently the colours and transparency changes
+            clock.tick(6)
 
 
-clock.tick(1)
 pygame.display.update()
