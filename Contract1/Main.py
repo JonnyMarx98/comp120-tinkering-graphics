@@ -8,7 +8,7 @@ pygame.mixer.init()
 clock = pygame.time.Clock()
 
 # Creates the screen
-WIDTH = 1000
+WIDTH = 1280
 HEIGHT = 720
 screen = pygame.display.set_mode([WIDTH, HEIGHT])
 
@@ -21,8 +21,8 @@ biodome = pygame.image.load('images/biodome.jpg')
 biodome = pygame.transform.scale(biodome, (WIDTH, HEIGHT))
 
 
-# Makes the image darker by dividing the pixels by 3
 def darker():
+    """Makes the image darker by dividing the pixels by 3"""
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
             red = screen.get_at((X, Y)).r
@@ -31,8 +31,8 @@ def darker():
             pxarray[X, Y] = (red/3, green/3, blue/3)
 
 
-# Makes the image lighter by multiplying the pixels by 3
 def lighter():
+    """Makes the image lighter"""
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
             red = screen.get_at((X, Y)).r
@@ -42,8 +42,8 @@ def lighter():
                 pxarray[X, Y] = (red*3, green*3, blue*3)
 
 
-# Makes the lights turn off (go dark)
 def bridge_lights():
+    """Makes the lights turn off (go dark)"""
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
             red = screen.get_at((X, Y)).r
@@ -53,8 +53,8 @@ def bridge_lights():
                 pxarray[X, Y] = (red/3, green/3, blue/3)
 
 
-# Makes the bridge slightly darker
 def bridge_lights_effect():
+    """Makes the bridge slightly darker"""
     for Y in xrange(HEIGHT):
         for X in xrange(WIDTH):
             red = screen.get_at((X, Y)).r
@@ -65,8 +65,8 @@ def bridge_lights_effect():
                 pxarray[X, Y] = (red - 10, green - 10, blue - 10)
 
 
-# blits the images to the screen
 def draw_bridge():
+    """blits the images to the screen"""
     screen.blit(bridge, [0, 0])
     bridge.set_alpha(alpha)
 
@@ -80,10 +80,9 @@ def draw_biodome():
     screen.blit(biodome, [0, 0])
     biodome.set_alpha(alpha)
 
-# status of bridge lights
+
+# status of bridge lights (on)
 status = 1
-on = 1
-off = 0
 
 # Setting different transparency values
 alpha = 255
@@ -172,17 +171,17 @@ while True:
 
     # Hold down right to flicker lights on bridge
     if key_pressed[K_RIGHT]:
-        if status == on:
-            status = off
+        if status == 1:
+            status = 0
             del pxarray
             draw_bridge()
             pxarray = pygame.PixelArray(screen)
-            clock.tick(5)
-        elif status == off:
-            status = on
+            clock.tick(4)
+        elif status == 0:
+            status = 1
             bridge_lights()
             bridge_lights_effect()
-            clock.tick(5)
+            clock.tick(25)
 
     del pxarray
 
@@ -217,12 +216,10 @@ while True:
         draw_wreckage()
         clock.tick(5)
 
-
     pygame.display.update()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
-    if event.type == pygame.KEYDOWN:
-        if event.key == pygame.K_ESCAPE:
+    if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             exit()
