@@ -14,6 +14,7 @@ screen = pygame.display.set_mode([WIDTH, HEIGHT])
 
 # Loads the image
 bridge = pygame.image.load('images/Bridge.jpg')
+# Scales image to fit screen
 bridge = pygame.transform.scale(bridge, (WIDTH, HEIGHT))
 wreckage = pygame.image.load('images/wreckage.jpg')
 wreckage = pygame.transform.scale(wreckage, (WIDTH, HEIGHT))
@@ -42,6 +43,32 @@ def lighter():
                 pxarray[X, Y] = (red*3, green*3, blue*3)
 
 
+def invert():
+    """inverts the image colours"""
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            red = screen.get_at((X, Y)).r
+            green = screen.get_at((X, Y)).g
+            blue = screen.get_at((X, Y)).b
+
+            red = 255 - red
+            green = 255 - green
+            blue = 255 - blue
+            pxarray[X, Y] = (red, green, blue)
+
+
+def greyscale():
+    """converts the image to greyscale"""
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            red = screen.get_at((X, Y)).r
+            green = screen.get_at((X, Y)).g
+            blue = screen.get_at((X, Y)).b
+
+            grey = (red + green + blue)/3
+            pxarray[X, Y] = (grey, grey, grey)
+
+
 def bridge_lights():
     """Makes the lights turn off (go dark)"""
     for Y in xrange(HEIGHT):
@@ -53,6 +80,34 @@ def bridge_lights():
                 pxarray[X, Y] = (red/3, green/3, blue/3)
 
 
+def bridge_lights_red():
+    """Makes the lights red"""
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            red = screen.get_at((X, Y)).r
+            green = screen.get_at((X, Y)).g
+            blue = screen.get_at((X, Y)).b
+            if red > 150 and green > 150 and blue > 150:
+                red = red
+                green /= 2
+                blue /= 2
+                pxarray[X, Y] = (red, green, blue)
+
+
+def bridge_lights_red_effect():
+    """Makes the bridge more"""
+    for Y in xrange(HEIGHT):
+        for X in xrange(WIDTH):
+            red = screen.get_at((X, Y)).r
+            green = screen.get_at((X, Y)).g
+            blue = screen.get_at((X, Y)).b
+            if 120 > red > 15 and 100 > green > 15 and 100 > blue > 15:
+                # - 10 from each rgb value to make it slightly darker
+
+                pxarray[X, Y] = (red + 35, green - 15, blue - 15)
+
+
+
 def bridge_lights_effect():
     """Makes the bridge slightly darker"""
     for Y in xrange(HEIGHT):
@@ -60,9 +115,9 @@ def bridge_lights_effect():
             red = screen.get_at((X, Y)).r
             green = screen.get_at((X, Y)).g
             blue = screen.get_at((X, Y)).b
-            if 100 > red > 10 and 100 > green > 10 and 100 > blue > 10:
+            if 100 > red > 15 and 100 > green > 15 and 100 > blue > 15:
                 # - 10 from each rgb value to make it slightly darker
-                pxarray[X, Y] = (red - 10, green - 10, blue - 10)
+                pxarray[X, Y] = (red - 15, green - 15, blue - 15)
 
 
 def draw_bridge():
@@ -86,7 +141,7 @@ status = 1
 
 # Setting different transparency values
 alpha = 255
-alphas = [255, 210, 170, 130, 90, 50]
+alphas = [255, 210, 170, 130, 100, 75]
 
 # Setting different background colours
 back_colour = (255, 255, 255)
@@ -182,6 +237,24 @@ while True:
             bridge_lights()
             bridge_lights_effect()
             clock.tick(25)
+
+    if key_pressed[K_LEFT]:
+        if status == 1:
+            status = 0
+            del pxarray
+            draw_bridge()
+            pxarray = pygame.PixelArray(screen)
+            clock.tick(4)
+        elif status == 0:
+            status = 1
+            bridge_lights_red()
+            bridge_lights_red_effect()
+            clock.tick(25)
+
+    if key_pressed[pygame.K_i]:
+        invert()
+    if key_pressed[pygame.K_g]:
+        greyscale()
 
     del pxarray
 
