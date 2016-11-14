@@ -198,9 +198,12 @@ def alien_torch():
             if ((x - mouse_pos_x)**2 + (y - mouse_pos_y)**2) <= (torch_radius**2):
                 screen.set_at((x, y), (wreckage.get_at((x, y))))
 
+
+# Main loop
 while True:
     key_pressed = pygame.key.get_pressed()
 
+    # Press 1, 2, and 3 to display each image
     if key_pressed[pygame.K_1]:
         # Resets alpha to 255 (no transparency)
         alpha = 255
@@ -209,6 +212,7 @@ while True:
         alpha = 255
         draw_bridge()
     if key_pressed[K_3]:
+        alpha = 255
         draw_wreckage()
 
     pxarray = pygame.PixelArray(screen)
@@ -219,8 +223,12 @@ while True:
         del pxarray
         draw_bridge()
         pxarray = pygame.PixelArray(screen)
+
+    # Press/hold down to make image darker
     if key_pressed[K_DOWN]:
         darker()
+
+    # Press/hold down to make image lighter
     if key_pressed[K_UP]:
         lighter()
 
@@ -238,6 +246,7 @@ while True:
             bridge_lights_effect()
             clock.tick(25)
 
+    # Hold down left to flicker red lights on bridge
     if key_pressed[K_LEFT]:
         if status == 1:
             status = 0
@@ -251,13 +260,17 @@ while True:
             bridge_lights_red_effect()
             clock.tick(25)
 
+    # Press i to invert image colours, press i again to undo invert effect
     if key_pressed[pygame.K_i]:
         invert()
+
+    # Press g to convert image to greyscale
     if key_pressed[pygame.K_g]:
         greyscale()
 
     del pxarray
 
+    # Hold down 4 to see wreckage effect and use alien torch
     if key_pressed[K_4]:
         clock.tick(60)
         screen.blit(wreckage, (0, 0))
@@ -265,6 +278,7 @@ while True:
         darken_all(updates)
         alien_torch()
 
+    # Hold down a to see flashing effect on biodome
     if key_pressed[pygame.K_a]:
         # Selects a random background colour and fills the screen with it.
         back_colour = random.choice(back_colours)
@@ -275,6 +289,7 @@ while True:
         # changes how frequently the colours and transparency changes
         clock.tick(5)
 
+    # Hold down a to see flashing effect on bridge
     if key_pressed[pygame.K_s]:
         back_colour = random.choice(back_colours)
         screen.fill(back_colour)
@@ -282,6 +297,7 @@ while True:
         draw_bridge()
         clock.tick(5)
 
+    # Hold down a to see flashing effect on wreckage
     if key_pressed[pygame.K_d]:
         back_colour = random.choice(back_colours)
         screen.fill(back_colour)
@@ -294,5 +310,6 @@ while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             sys.exit()
+    # Press esc to exit
     if event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE:
             exit()
